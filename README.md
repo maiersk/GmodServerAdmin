@@ -1,5 +1,3 @@
-# graduation design. no use more module.
-
 # dev :
 static webpage file put in '/public/' directory
 
