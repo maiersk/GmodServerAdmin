@@ -1,0 +1,1218 @@
+{
+	"info": {
+		"_postman_id": "792e93e9-a97d-4829-b89a-a1bef19dea6f",
+		"name": "GmodAdmin",
+		"description": "GmodAdmin all api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "groups /create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\" : \"test\",\r\n    \"powers\": [\r\n        \"user_uploadimage\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/groups/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"groups",
+								"create"
+							]
+						},
+						"description": "create a group"
+					},
+					"response": []
+				},
+				{
+					"name": "groups /",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/groups/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"groups",
+								""
+							]
+						},
+						"description": "display all group"
+					},
+					"response": []
+				},
+				{
+					"name": "groups /:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/groups/:id",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"groups",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "display one group by id"
+					},
+					"response": []
+				},
+				{
+					"name": "groups /:id/edit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"powers\": [\r\n        \"user_uploadimage\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/groups/:id/edit",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"groups",
+								":id",
+								"edit"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						},
+						"description": "edit a group by id"
+					},
+					"response": []
+				},
+				{
+					"name": "groups /:id/remove",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/groups/:id/remove",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"groups",
+								":id",
+								"remove"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8"
+								}
+							]
+						},
+						"description": "remove a group by id"
+					},
+					"response": []
+				}
+			],
+			"description": "user group api",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6dc72e66-69fc-4eae-8bf8-d76475152130",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "8bddbcab-96cd-46e7-93ed-02dd0ae2443a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Screenshots",
+			"item": [
+				{
+					"name": "screenshots /upload",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "description",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/实用工具与资料/图片/0df3d7ca7bcb0a46671d12ee6963f6246b60af2e.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1/screenshots/upload",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"screenshots",
+								"upload"
+							]
+						},
+						"description": "upload screenshot"
+					},
+					"response": []
+				},
+				{
+					"name": "screenshots /",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/screenshots/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"screenshots",
+								""
+							]
+						},
+						"description": "display all screenshot"
+					},
+					"response": []
+				},
+				{
+					"name": "screenshots /:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/screenshots/:id",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"screenshots",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1580981356591-3pr24b"
+								}
+							]
+						},
+						"description": "display one screenshots by id"
+					},
+					"response": []
+				},
+				{
+					"name": "screenshots /:id/edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "description",
+									"value": "ava",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/实用工具与资料/图片/1.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1/screenshots/:id/edit",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"screenshots",
+								":id",
+								"edit"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1580980474336-n8kr4l"
+								}
+							]
+						},
+						"description": "edit a screenshots by id"
+					},
+					"response": []
+				},
+				{
+					"name": "screenshots /:id/remove",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/screenshots/:id/remove",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"screenshots",
+								":id",
+								"remove"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1580980474336-n8kr4l"
+								}
+							]
+						},
+						"description": "remove a screenshots by id"
+					},
+					"response": []
+				},
+				{
+					"name": "screenshots /users/:userid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/screenshots/users/:userid",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"screenshots",
+								"users",
+								":userid"
+							],
+							"variable": [
+								{
+									"key": "userid",
+									"value": "76561198098162297"
+								}
+							]
+						},
+						"description": "display all user screenshots"
+					},
+					"response": []
+				}
+			],
+			"description": "user screenshots",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Servers",
+			"item": [
+				{
+					"name": "servers /create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"NxMod_local\",\r\n\t\"ip\": \"192.168.0.6\",\r\n\t\"port\": \"27017\",\r\n\t\"rconpass\": \"yqmdx123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/servers/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"servers",
+								"create"
+							]
+						},
+						"description": "create a servers"
+					},
+					"response": []
+				},
+				{
+					"name": "servers /",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/servers/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"servers",
+								""
+							]
+						},
+						"description": "display all server"
+					},
+					"response": []
+				},
+				{
+					"name": "servers /:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/servers/:id",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"servers",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1579954560541-plu8re"
+								}
+							]
+						},
+						"description": "display a servers by id"
+					},
+					"response": []
+				},
+				{
+					"name": "servers /:id/edit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"NxMod_local\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/servers/:id/edit",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"servers",
+								":id",
+								"edit"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1580649450045-g007ss"
+								}
+							]
+						},
+						"description": "edit a servers by id"
+					},
+					"response": []
+				},
+				{
+					"name": "servers /:id/remove",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/servers/:id/remove",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"servers",
+								":id",
+								"remove"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1580649450045-g007ss"
+								}
+							]
+						},
+						"description": "remove a servers by id"
+					},
+					"response": []
+				},
+				{
+					"name": "servers /:id/status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/servers/:id/status",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"servers",
+								":id",
+								"status"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1580355033013-k4v5es"
+								}
+							]
+						},
+						"description": "display a servers status by id"
+					},
+					"response": []
+				},
+				{
+					"name": "servers /:id/command",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"command\" : \"ulx help\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/servers/:id/command",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"servers",
+								":id",
+								"command"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1580355033013-k4v5es"
+								}
+							]
+						},
+						"description": "exec command a servers by id"
+					},
+					"response": []
+				}
+			],
+			"description": "all servers",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Rules",
+			"item": [
+				{
+					"name": "rules /create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"serverid\": \"1580355033013-k4v5es\",\r\n    \"content\": \"这个服务器的游戏规则123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/rules/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rules",
+								"create"
+							]
+						},
+						"description": "create a rule"
+					},
+					"response": []
+				},
+				{
+					"name": "rules /",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/rules/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rules",
+								""
+							]
+						},
+						"description": "display all rules"
+					},
+					"response": []
+				},
+				{
+					"name": "rules /:serverid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/rules/:serverid",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rules",
+								":serverid"
+							],
+							"variable": [
+								{
+									"key": "serverid",
+									"value": "76561198098162297"
+								}
+							]
+						},
+						"description": "display a rules by serverid"
+					},
+					"response": []
+				},
+				{
+					"name": "rules /:serverid/edit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"这个服务器的游戏规则32\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/rules/:serverid/edit",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rules",
+								":serverid",
+								"edit"
+							],
+							"variable": [
+								{
+									"key": "serverid",
+									"value": "1580355033013-k4v5es"
+								}
+							]
+						},
+						"description": "edit a rules by serverid"
+					},
+					"response": []
+				},
+				{
+					"name": "rules /:serverid/remove",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/rules/:serverid/remove",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"rules",
+								":serverid",
+								"remove"
+							],
+							"variable": [
+								{
+									"key": "serverid",
+									"value": "1580355033013-k4v5es"
+								}
+							]
+						},
+						"description": "remove a rules by serverid"
+					},
+					"response": []
+				}
+			],
+			"description": "all servers rules",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Bans",
+			"item": [
+				{
+					"name": "bans /banplayer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userid\": \"76561198098162297\",\r\n    \"serverid\": \"1579954560541-plu8re\",\r\n    \"unban\": \"1d\",\r\n    \"reason\" : \"none\"\r\n}                                                                             ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1/bans/banplayer",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"bans",
+								"banplayer"
+							]
+						},
+						"description": "ban a player by userid"
+					},
+					"response": []
+				},
+				{
+					"name": "bans /:userid/unban",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/bans/:userid/unban",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"bans",
+								":userid",
+								"unban"
+							],
+							"variable": [
+								{
+									"key": "userid",
+									"value": "76561198098162297"
+								}
+							]
+						},
+						"description": "unban a player by userid"
+					},
+					"response": []
+				},
+				{
+					"name": "bans /",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/bans/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"bans",
+								""
+							]
+						},
+						"description": "display all bans"
+					},
+					"response": []
+				},
+				{
+					"name": "bans /:userid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/bans/:userid",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"bans",
+								":userid"
+							],
+							"variable": [
+								{
+									"key": "userid",
+									"value": "76561198098162297"
+								}
+							]
+						},
+						"description": "display a bans by userid"
+					},
+					"response": []
+				},
+				{
+					"name": "bans /servers/:serverid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1/bans/servers/:serverid",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"path": [
+								"bans",
+								"servers",
+								":serverid"
+							],
+							"variable": [
+								{
+									"key": "serverid",
+									"value": "1581044100785-vecaoh"
+								}
+							]
+						},
+						"description": "display a servers all bans"
+					},
+					"response": []
+				}
+			],
+			"description": "all servers bans",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "nosteamin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"steamid\":\"76561198098162297\",\n\t\"personaname\":\"ABTTEX\",\n\t\"lastlogoff\":1580790584,\n\t\"profileurl\":\"https://steamcommunity.com/profiles/00000000000001/\",\n\t\"avatar\":\"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/724e8f6d48445218534f3532cccd76ec1b0102e6.jpg\",\n\t\"avatarmedium\":\"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/724e8f6d48445218534f3532cccd76ec1b0102e6_medium.jpg\",\n\t\"avatarfull\":\"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/72/724e8f6d48445218534f3532cccd76ec1b0102e6_full.jpg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1/sign/nosteamin",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"sign",
+						"nosteamin"
+					]
+				},
+				"description": "no user steam signin "
+			},
+			"response": []
+		},
+		{
+			"name": "nosteamout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/sign/nosteamout",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"sign",
+						"nosteamout"
+					]
+				},
+				"description": "no user steam signout"
+			},
+			"response": []
+		},
+		{
+			"name": "users /",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/javascript",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1/users/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"users",
+						""
+					]
+				},
+				"description": "display all user"
+			},
+			"response": []
+		},
+		{
+			"name": "users /:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/users/:id/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"users",
+						":id",
+						""
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "root"
+						}
+					]
+				},
+				"description": "display one user by id"
+			},
+			"response": []
+		},
+		{
+			"name": "users /:id/editgroupid",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"groupid\" : \"4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1/users/00000000000000001/editgroupid",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"users",
+						"00000000000000001",
+						"editgroupid"
+					]
+				},
+				"description": "edit one user groupid by id"
+			},
+			"response": []
+		},
+		{
+			"name": "users /:id/remove",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1/users/123/remove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"users",
+						"123",
+						"remove"
+					]
+				},
+				"description": "remove one user by id"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "8cac1981-4452-4ebd-985e-8018a8d94fb6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2e3832dd-34d0-4a57-8bd4-a27fe93bad19",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

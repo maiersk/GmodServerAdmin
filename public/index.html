@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>index</title>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        let usersteamid64;
+
+        $(function() {
+            $.ajax({
+                type : "GET",
+                dataType : "json",
+                url : "/sign/in",
+                async : false,
+                success : (data) => {
+                    console.log(data);
+                    usersteamid64 = data.steamid64;
+                }
+            })
+
+            //获取登录的用户信息
+            $.ajax({
+                type : "GET",
+                dataType : "json",
+                url : "/users/" + usersteamid64,
+                success : (data) => {
+                    let msg = data.msg;
+                    //if (!msg) {
+                        console.log(data);
+                        usernick = data.data.steamobj.personaname;
+                        avatar = data.data.steamobj.avatarfull;
+                        console.log(usernick, avatar);
+                        
+                        $("#wel").append(usernick);
+                        $("#aimg").attr("src", avatar);
+                    //}
+                }
+            })
+        })
+
+        function test() {
+            console.log($('#userid').val())
+            console.log($('#groupid').val())
+            $.ajax({
+                type : "POST",
+                dataType : "json",
+                url : "/users/" + $('#userid').val() + "/groupid",
+                data : {
+                    groupid : $('#groupid').val()
+                },
+                success : (data) => {
+                    //if (!msg) {
+                        console.log(data);
+                        $('#edit_groupid').parent().append("<span>" + data.massage + '</span>');
+                    //}
+                }
+            })
+        }
+
+        function upload() {
+            $.ajax({
+                type : "POST",
+                dataType : "json",
+                url : "/screenshots/upload",
+                data : {
+                    desc : 'test',
+                    image : 'test',
+                },
+                success : (data) => {
+                    let msg = data.msg;
+                    //if (!msg) {
+                        console.log(data);
+                    //}
+                }
+            })
+        }
+
+        function selectimg() {
+            let imageid = $('#imageid').val();
+            let img = $('#editimg'); 
+            let form = $('#editimg_form');
+
+            $.ajax({
+                type : 'GET',
+                url : '/screenshots/' + imageid,
+                dataType : 'json',
+                success : (data) => {
+                    console.log(data)
+                    img.attr('src', '/screenshot/' + data.image);   
+                    form.attr('action', '/screenshots/' + imageid + '/edit');
+                }
+            })
+
+        }
+    </script>
+</head>
+<body style="width: 950px; margin: 0 auto;">
+    <header>
+        <h1 id="wel">welcome </h1>
+        <img id="aimg" src="" alt="">
+        <form method="get">
+            <div id="signin"></div>
+            <a href="/sign/out">signout</a>
+        </form>
+    </header>
+
+
+    <h1>test api function</h1>
+    <fieldset>
+        <legend>all user</legend>
+        
+    </fieldset>
+    <fieldset>
+        <legend>edit user groupid</legend>
+        <input placeholder="userid" type="text" id="userid">
+        <input placeholder="groupid" type="text" id="groupid">
+        <button id="edit_groupid" onclick="test()">edit groupid</button>
+        <button id="remove_user" onclick="">remove user</button>
+    </fieldset>
+    
+
+    <fieldset>
+        <legend>all screenshot</legend>
+        
+    </fieldset>
+    <fieldset>
+        <legend>upload screenshot</legend>
+        <form method="POST" action="/screenshots/upload" enctype="multipart/form-data">
+            <label>description</label>
+            <input placeholder="description" type="text" name="description">
+            <br>
+            <label>screenshot</label >
+            <input type="file" name="image">
+            <br>
+            <input type="submit" value="upload">
+        </form>
+    </fieldset>
+    <fieldset>
+        <legend>edit screenshot</legend>
+        <img id='editimg' alt="">
+        <input type="text" id="imageid">
+        <button onclick="selectimg()">选择图片</button>
+        <form id="editimg_form" method="POST" enctype="multipart/form-data">
+            <label>description</label>
+            <input placeholder="description" type="text" name="description">
+            <br>
+            <label>screenshot</label >
+            <input type="file" name="image">
+            <br>
+            <input type="submit" value="upload">
+        </form>
+    </fieldset>
+
+</body>
+</html>

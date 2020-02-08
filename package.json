@@ -1,0 +1,38 @@
+{
+  "name": "gmodserveradmin",
+  "version": "1.0.0",
+  "description": "GmodServerAdmin-system",
+  "main": "app.js",
+  "bin": {
+    "gmodserveradmin": "www.js"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.17.0",
+    "long": "^4.0.0",
+    "moment": "^2.24.0",
+    "mysql": "^2.18.1",
+    "objectid-to-timestamp": "^1.3.0",
+    "request": "^2.88.0",
+    "uid": "0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maiersk"
+  },
+  "keywords": [
+    "gmod",
+    "server"
+  ],
+  "author": "maiersk",
+  "license": "ISC"
+}
