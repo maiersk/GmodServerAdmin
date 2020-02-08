@@ -1,14 +1,14 @@
-graduation design. no use more module.
+# graduation design. no use more module.
 
-dev :
+# dev :
 static webpage file put in '/public/' directory
 
-need module :
+# need module :
 mysql express express-session express-formidable
 
-install :
-1.need youself install node.js and mysql.
-2.run install.bat to install need module and create database.
+# install :
+1. need youself install node.js and mysql.
+2. run install.bat to install need module and create database.
 
-use :
+# use :
 run start.bat
