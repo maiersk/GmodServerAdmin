@@ -6,7 +6,7 @@ Power.USER_CHECKIMAGE = 'user_checkimage';
 Power.USER_CHANGEGROUP = 'user_changegroup';
 Power.USER_DEL = 'user_del';
 
-Power.GROUP_DISPLAY = 'group_display'
+Power.GROUP_DISPLAY = 'group_display';
 Power.GROUP_ADD = 'group_add';
 Power.GROUP_EDIT = 'group_edit';
 Power.GROUP_DEL = 'group_del';
