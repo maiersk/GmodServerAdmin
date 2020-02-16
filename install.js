@@ -40,7 +40,7 @@ const main = async(args) => {
             args[4] || "",
             args[5] || "server_admin",
             args[6] || "/public/screenshot/",
-            args[7] || "985438D9C169CDF9C8303DB02B15C629"
+            args[7] ||
         ));
 
     } else if (args[0] === 'setup') {
