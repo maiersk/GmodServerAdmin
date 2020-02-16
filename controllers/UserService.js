@@ -77,7 +77,7 @@ class UserService extends BaseService {
 
                 session.user = null;   
                 resolve('signout succeed');                 
-            })
+            }).catch((err) => reject(err));
         });
     }
 
