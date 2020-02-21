@@ -12,9 +12,9 @@ const userservice = require('../controllers/UserService');
 
 // 生成登录url接口
 router.get('/buildurl', (req, res) => {
-    let realm = 'http://127.0.0.1';
+    let realm = 'http://127.0.0.1:' + conf.port;
     let return_path = realm + '/sign/in';
-
+    
     let url = build_url({
         'openid.ns' : 'http://specs.openid.net/auth/2.0',
         'openid.mode' : 'checkid_setup',
@@ -69,8 +69,8 @@ router.get('/in', (req, res) => {
 
 //登出
 router.get('/out', (req, res) => { 
-    userservice.signout(req.session).then(() => {
-        res.redirect('back');
+    userservice.signout(req.session).then((data) => {
+        res.json(resjson.msg(data));
     }).catch((err) => {
         res.json(resjson.err(err));
     });
@@ -86,12 +86,6 @@ router.post('/nosteamin', check({Logined:true}), (req, res) => {
     }).catch((err) => {
         res.json(resjson.err(err));
     })
-})
-
-router.get('/nosteamout', check({Login:true}), (req, res) => {
-    userservice.signout(req.session).then((data) => {
-        res.json(resjson.data(data));
-    });
 })
 
 module.exports = router;
