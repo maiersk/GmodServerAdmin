@@ -8,6 +8,16 @@ const Power = require('../models/Power');
 
 const groupservice = require('../controllers/GroupService');
 
+router.get('/powers', check({Login:true, Power:Power.GROUP_DISPLAY}), (req, res) => {
+    let powerList = [];
+    for (const key in Power) {
+        if (typeof Power[key] !== 'function') {
+            powerList.push(Power[key]);
+        }
+    }
+    res.json(resjson.data(powerList));
+})
+
 router.get('/', check({Login:true, Power:Power.GROUP_DISPLAY}), (req, res) => {
     groupservice.findAll().then((grouplist) => {
         res.json(resjson.data(grouplist));
