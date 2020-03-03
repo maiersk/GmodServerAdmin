@@ -57,6 +57,10 @@ router.get('/in', (req, res) => {
             'content-type': 'application/json',
         }
     }, (error, response, body) => {
+        // 密匙错误返回api提示
+        if (!body.response) {
+            res.send(body);
+        }
         let steamobj = body.response['players'][0];
 
         userservice.signin(steamobj, req.session).then((data) => {
@@ -68,7 +72,7 @@ router.get('/in', (req, res) => {
 })
 
 //登出
-router.get('/out', (req, res) => { 
+router.get('/out', check({Login:true}), (req, res) => { 
     userservice.signout(req.session).then((data) => {
         res.json(resjson.msg(data));
     }).catch((err) => {
@@ -86,6 +90,12 @@ router.post('/nosteamin', check({Logined:true}), (req, res) => {
     }).catch((err) => {
         res.json(resjson.err(err));
     })
+})
+
+router.get('/nosteamout', check({Login:true}), (req, res) => {
+    userservice.signout(req.session).then((data) => {
+        res.json(resjson.data(data));
+    });
 })
 
 module.exports = router;
