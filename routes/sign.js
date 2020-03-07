@@ -58,7 +58,7 @@ router.get('/in', (req, res) => {
         }
     }, (error, response, body) => {
         // 密匙错误返回api提示
-        if (!body.response) {
+        if (!body.response || body.response == undefined) {
             res.send(body);
         }
         let steamobj = body.response['players'][0];
