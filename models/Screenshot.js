@@ -1,3 +1,5 @@
+const conf = require('../config/defeult');
+
 class Screenshot {
     /**
      * user upload img
@@ -5,15 +7,15 @@ class Screenshot {
      * @param {number|string} userid 
      * @param {string} description 
      * @param {number} pv 
-     * @param {number} lk 
+     * @param {number} audit
      * @param {string} image 
      */
-    constructor(id, userid, description, pv, lk, image) {
+    constructor(id, userid, description, pv, audit, image) {
         this.id = id;
         this.userid = userid;
         this.description = description;
         this.pv = pv;
-        this.lk = lk;
+        this.audit = audit;
         this.image = image;
     }
 
@@ -23,8 +25,8 @@ class Screenshot {
         json.userid = this.userid;
         json.description = this.description;
         json.pv = this.pv;
-        json.lk = this.lk;
-        json.image = this.image;
+        json.audit = this.audit;
+        json.image = conf.screenshotpath + this.image;
         return json;
     }
 
@@ -34,7 +36,8 @@ class Screenshot {
             json.id,
             json.userid,
             json.description,
-            json.pv || 0, json.lk || 0,
+            json.pv || 0, 
+            json.audit || 0,
             json.image
         );
     }

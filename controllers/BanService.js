@@ -16,9 +16,13 @@ class BanService extends BaseService {
 
     async create(ban) {
         try {
-            const user = await userSer.findByid(ban.userid);
+            // 使用用户id对服务端相应玩家执行ban情况
+            let steamid32
+            if (ban.userid) {
+                user = await userSer.findByid(ban.userid);                
+                steamid32 = await user.getSteamID32();
+            }
             const server = await serverSer.findByid(ban.serverid)
-            const steamid32 = await user.getSteamID32();
 
             const rcon = new Rcon({
                 host : server.ip,
@@ -28,6 +32,20 @@ class BanService extends BaseService {
 
             await rcon.connect();
             await rcon.auth();
+
+            // 使用玩家名ban，需要先发送命令到服务端接收玩家id
+            let playersteamid;
+            if (ban.playername) {
+                playersteamid = await rcon.command(`steamidbynick ${ban.playername}`, true);
+                ban.userid = playersteamid.substr(0, playersteamid.length - 1);     // 截掉返回来的\n
+            
+                if (typeof (ban.userid * 1) != 'number') { throw 'rcon callback a invalid steamid'; }
+
+                // 检查用户是否存在，不存在创建玩家用户
+                const user = await userSer.createPly(ban.userid, ban.playername);
+
+                steamid32 = await user.getSteamID32();
+            }
 
             await super.create(ban);
 

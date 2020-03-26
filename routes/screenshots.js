@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const screenshotpath = require('../config/defeult').screenshotpath;
-const imagepath = path.join(__dirname, '..' + screenshotpath);
+const imagepath = path.join(__dirname, '../public/' + screenshotpath);
 const formidable = require('express-formidable') ({
     //上传文件目录
     uploadDir : imagepath, 
@@ -16,6 +16,7 @@ const check = require('../middlewares/check').check;
 const createat = require('../util/createat');
 
 const screenshotSer = require('../controllers/ScreenshotService');
+const userSer = require('../controllers/UserService');
 
 router.get('/', check({Login:true}), (req, res) => {
     screenshotSer.findAll().then((screenshotlist) => {
@@ -48,7 +49,7 @@ router.post('/upload', formidable, check({Login:true, Power:Power.USER_UPLOADIMA
         id : createat.timeid(),
         userid : user.id,
         description : desc || '',
-        image : image.path.split(path.sep).pop() || '',
+        image : image ? image.path.split(path.sep).pop() : null,
     }
     
     screenshotSer.create(screenshot).then((data) => {
@@ -69,16 +70,24 @@ router.get('/:id', check({Login:true}), (req, res) => {
     })
 })
 
+router.post('/:id/checkimage', check({Login:true, Power:Power.USER_CHECKIMAGE}), (req, res) => {
+    const shotid = req.params.id;
+
+    screenshotSer.checkImage(shotid).then((screenshot) => {
+        res.json(resjson.data(screenshot.toJson()));
+    }).catch((err) => {
+        res.json(resjson.err(err));
+    })
+})
+
 router.post('/:id/edit', check({Login:true}), formidable, (req, res) => {
     const shotid = req.params.id;
-    const userid = req.session.user;
+    const userid = req.session.user.id;
     const desc = req.fields.description;
-    const image = req.files.image;
 
     const shotjson = {
         userid : userid,
         description : desc,
-        image : image
     }
 
     screenshotSer.editByid(shotid, shotjson).then((data) => {
@@ -97,7 +106,7 @@ router.get('/:id/remove', check({Login:true}), (req, res) => {
         id : shotid,
         userid : userid
     }
-
+    console.log(userSer);
     screenshotSer.remove(shotjson).then((data) => {
         res.json(resjson.msg(data));
     }).catch((err) => {

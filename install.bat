@@ -11,7 +11,7 @@ set host=localhost
 set user=root
 set password=none
 set database=server_admin
-set screenshotpath=/public/screenshot/
+set screenshotpath=/screenshot/
 set steamapikey=none
 
 REM 设置输入各参
@@ -21,7 +21,7 @@ set /p host=input to set mysql host or default(localhost):
 set /p user=input to set mysql user or default(root):
 set /p password=input to set mysql password:
 set /p database=input to set webside database or default(server_admin):
-set /p screenshotpath=input to set screenshotpath or default(/public/screenshot/):
+set /p screenshotpath=input to set screenshotpath or default(/screenshot/):
 set /p steamapikey=input to set steamapikey or default:
 
 call node install.js cfg %port% %host% %user% %password% %database% %screenshotpath% %steamapikey%

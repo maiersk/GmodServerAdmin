@@ -6,11 +6,11 @@ const check = require('../middlewares/check').check;
 
 const Power = require('../models/Power');
 
-const userservice = require('../controllers/UserService');
+const userSer = require('../controllers/UserService');
 
 //得到所有用户信息
 router.get('/', check({Login:true}), (req, res) => {
-    userservice.findAll().then((userlist) => {
+    userSer.findAll().then((userlist) => {
         res.json(resjson.data(userlist));
     });
 });
@@ -19,7 +19,7 @@ router.get('/', check({Login:true}), (req, res) => {
 router.get('/:id', check({Login:true}), (req, res) => {
     let userid = req.params.id;
     
-    userservice.findByid(userid).then((user) => {
+    userSer.findByid(userid).then((user) => {
         res.json(resjson.data(user.toJson()));
     }).catch((err) => {
         res.json(resjson.err(err));
@@ -29,8 +29,11 @@ router.get('/:id', check({Login:true}), (req, res) => {
 router.post('/:id/editgroupid', check({Login:true, Power:Power.USER_CHANGEGROUP}), (req, res) => {
     let userid = req.params.id;
     let groupid = req.body.groupid;
-
-    userservice.editGroupid(userid, groupid).then((data) => {
+    if (userid == req.session.user.id) {
+        res.json(resjson.err('can\'t editgroupid youself'));
+        return;
+    }
+    userSer.editGroupid(userid, groupid).then((data) => {
         res.json(resjson.msg(data));
     }).catch((err) => {
         res.json(resjson.err(err));
@@ -39,8 +42,11 @@ router.post('/:id/editgroupid', check({Login:true, Power:Power.USER_CHANGEGROUP}
 
 router.get('/:id/remove', check({Login:true, Power:Power.USER_DEL}), (req, res) => {
     const userid = req.params.id;
-
-    userservice.removeByid(userid).then((data) => {
+    if (userid == req.session.user.id) {
+        res.json(resjson.err('can\'t remvoe youself'));
+        return;
+    }
+    userSer.removeByid(userid).then((data) => {
         res.json(resjson.msg(data));
     }).catch((err) => {
         res.json(resjson.err(err));

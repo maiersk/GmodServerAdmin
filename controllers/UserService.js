@@ -2,7 +2,7 @@ const conn = require('../lib/mysql');
 const Dao = require('../controllers/dataDao');
 const userdao = new Dao(Dao.USERS, conn);
 
-const logger = new (require('../lib/Logger'))('UserService', false, 'UserService.js');
+const logger = new (require('../lib/Logger'))('UserService', true, 'UserService.js');
 
 const BaseService = require('../controllers/BaseService');
 const User = require('../models/User');
@@ -12,6 +12,32 @@ const groupSer = require('../controllers/GroupService');
 class UserService extends BaseService {
     constructor(obj, dao) {
         super(obj, dao);
+    }
+
+    // 创建被操作过的玩家用户账号
+    // 用于记录ban等
+    async createPly(steamid, name) {
+        try {
+            return await super.findByid(steamid);
+
+        } catch (err) {
+            if (err && err.substr(-4) === 'null') {
+                const userjson = {
+                    id : steamid,
+                    groupid : 4,
+                    steamobj : JSON.stringify({
+                        personaname : name
+                    }),
+                }
+    
+                await super.create(userjson);
+                logger.log(`for player create a new user: ${name}`);
+    
+                return await super.findByid(steamid);
+            }
+
+            return Promise.reject(err);
+        }
     }
 
     signin(steamobj, session) {
@@ -24,9 +50,10 @@ class UserService extends BaseService {
                 const unixtimestamp = Math.round(new Date().getTime()/1000);
                 logger.debug(unixtimestamp - userdata.getLastlogoff());
                 
-                // 如果玩家最后登陆时间大于一周，需要更新steamobj数据                
-                if ((unixtimestamp - userdata.getLastlogoff()) >= 604800) {
-                    user.steamobj = JSON.stringify(steamobj); 
+                // 如果玩家最后登陆时间大于一周，或者用户没有最后登录时间，需要更新steamobj数据。   
+                if ((unixtimestamp - userdata.getLastlogoff()) >= 604800 || !userdata.getLastlogoff()) {
+                    user = new User(user.id, user.groupid, JSON.stringify(steamobj));   // 重新创建用户类，过滤steamobj不需要的值
+                    logger.debug(user);
 
                     super.editByid(user.id, user).then((data) => {
                         logger.log(`${userdata.getName()} updata steamobj`);
@@ -97,28 +124,49 @@ class UserService extends BaseService {
         try {
             const user = await super.findByid(userid);
 
-            // 返回执行后的值。
-            const bool = await groupSer.checkPower(user, power);
-            return bool;
+            // 返回执行后的值。由于checkPower写法接受flase使用reject方法，需要另外铺抓返回。
+            return await groupSer.checkPower(user, power).catch((err) => {
+                logger.debug(err);
+                if (typeof err === 'boolean') {
+                    return err;
+                }
+                throw err;
+            });
             
         } catch (err) {
             return Promise.reject(err);
-        }
-
-        // const user = await super.findByid(userid);
-
-        // // 返回执行后的值。
-        // return await groupSer.checkPower(user, power).then((bool) => {
-        //     return bool;
-        // }).catch((bool) => {
-        //     // 需处理checkPower 的 finByid异常。
-        //     if (typeof bool === 'boolean') {
-        //         return bool;
-        //     }
-        //     throw bool;
-        // });        
+        }       
     }
 
+    async removeByid(id) {
+        const removeUserData = async (service, userid) => {
+            try {
+                const alldata = await service.findAll();
+                await alldata.forEach((item) => {
+                    logger.debug(item.userid == userid, item.userid);
+                    if (item.userid == userid) {
+                        service.removeByid(item.id);
+                    }
+                });
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        }
+
+        try {
+            // 在此调用，避免进入循环调用陷阱
+            const serverSer = require('../controllers/ServerService');
+            const screenshotSer = require('../controllers/ScreenshotService');
+
+            await removeUserData(serverSer, id);
+            await removeUserData(screenshotSer, id);
+            await super.removeByid(id);
+
+            return 'remove user and associated data succeed';
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
 }
 
 module.exports = new UserService(User, userdao);

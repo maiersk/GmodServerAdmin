@@ -12,7 +12,7 @@ const userservice = require('../controllers/UserService');
 
 // 生成登录url接口
 router.get('/buildurl', (req, res) => {
-    let realm = 'http://127.0.0.1:' + conf.port;
+    let realm = 'http://' + conf.ip + ':' + conf.port;
     let return_path = realm + '/sign/in';
     
     let url = build_url({

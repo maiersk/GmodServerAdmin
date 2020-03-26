@@ -1,4 +1,5 @@
 module.exports = { 
+    ip : '192.168.0.6',
     port : 80, 
     session : { 
         secret : 'serveradmin', 
@@ -11,6 +12,6 @@ module.exports = {
         password : '', 
         database : 'server_admin', 
     }, 
-    screenshotpath : '/public/screenshot/', 
+    screenshotpath : '/screenshot/', 
     STEAM_APIKEY : 'none', 
 } 

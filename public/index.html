@@ -3,157 +3,759 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>index</title>
-
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-        let usersteamid64;
-
-        $(function() {
-            $.ajax({
-                type : "GET",
-                dataType : "json",
-                url : "/sign/in",
-                async : false,
-                success : (data) => {
-                    console.log(data);
-                    usersteamid64 = data.steamid64;
-                }
-            })
-
-            //获取登录的用户信息
-            $.ajax({
-                type : "GET",
-                dataType : "json",
-                url : "/users/" + usersteamid64,
-                success : (data) => {
-                    let msg = data.msg;
-                    //if (!msg) {
-                        console.log(data);
-                        usernick = data.data.steamobj.personaname;
-                        avatar = data.data.steamobj.avatarfull;
-                        console.log(usernick, avatar);
-                        
-                        $("#wel").append(usernick);
-                        $("#aimg").attr("src", avatar);
-                    //}
-                }
-            })
-        })
-
-        function test() {
-            console.log($('#userid').val())
-            console.log($('#groupid').val())
-            $.ajax({
-                type : "POST",
-                dataType : "json",
-                url : "/users/" + $('#userid').val() + "/groupid",
-                data : {
-                    groupid : $('#groupid').val()
-                },
-                success : (data) => {
-                    //if (!msg) {
-                        console.log(data);
-                        $('#edit_groupid').parent().append("<span>" + data.massage + '</span>');
-                    //}
-                }
-            })
-        }
-
-        function upload() {
-            $.ajax({
-                type : "POST",
-                dataType : "json",
-                url : "/screenshots/upload",
-                data : {
-                    desc : 'test',
-                    image : 'test',
-                },
-                success : (data) => {
-                    let msg = data.msg;
-                    //if (!msg) {
-                        console.log(data);
-                    //}
-                }
-            })
-        }
-
-        function selectimg() {
-            let imageid = $('#imageid').val();
-            let img = $('#editimg'); 
-            let form = $('#editimg_form');
-
-            $.ajax({
-                type : 'GET',
-                url : '/screenshots/' + imageid,
-                dataType : 'json',
-                success : (data) => {
-                    console.log(data)
-                    img.attr('src', '/screenshot/' + data.image);   
-                    form.attr('action', '/screenshots/' + imageid + '/edit');
-                }
-            })
-
-        }
-    </script>
-</head>
-<body style="width: 950px; margin: 0 auto;">
-    <header>
-        <h1 id="wel">welcome </h1>
-        <img id="aimg" src="" alt="">
-        <form method="get">
-            <div id="signin"></div>
-            <a href="/sign/out">signout</a>
-        </form>
-    </header>
-
-
-    <h1>test api function</h1>
-    <fieldset>
-        <legend>all user</legend>
-        
-    </fieldset>
-    <fieldset>
-        <legend>edit user groupid</legend>
-        <input placeholder="userid" type="text" id="userid">
-        <input placeholder="groupid" type="text" id="groupid">
-        <button id="edit_groupid" onclick="test()">edit groupid</button>
-        <button id="remove_user" onclick="">remove user</button>
-    </fieldset>
+    <title>【GMOD游戏】服务端管理系统</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.css">
     
+</head>
+<body>
+<!--	<button id="testBtn">获取现在是哪个choice获得焦点</button>-->
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">标题</h4>
+		  </div>
+		  <div class="modal-body">
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<header>
+		<nav class="topbar">
+			<img src="images/gLogo.png" />
+			<ul class="rightul">
+				<i class="glyphicon glyphicon-align-justify"></i>
+				<li class="avatar">
+					<img />
+				</li>
+				<li class="name"></li>
+				<li class="signout">
+					<a>
+						<i class="glyphicon glyphicon-share">登出</i>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	
+	<div id="vtab_small_div">
+		<ul class="nav nav-tab vertical-tab" role="tablist" id="vtab_small">
+			<li role="presentation" data-choice="choiceOne" class="active Dashboard">
+				<a href="#Meter" aria-controls="home" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-scale"></i>&nbsp;&nbsp;仪表盘</a>
+			</li>
 
-    <fieldset>
-        <legend>all screenshot</legend>
-        
-    </fieldset>
-    <fieldset>
-        <legend>upload screenshot</legend>
-        <form method="POST" action="/screenshots/upload" enctype="multipart/form-data">
-            <label>description</label>
-            <input placeholder="description" type="text" name="description">
-            <br>
-            <label>screenshot</label >
-            <input type="file" name="image">
-            <br>
-            <input type="submit" value="upload">
-        </form>
-    </fieldset>
-    <fieldset>
-        <legend>edit screenshot</legend>
-        <img id='editimg' alt="">
-        <input type="text" id="imageid">
-        <button onclick="selectimg()">选择图片</button>
-        <form id="editimg_form" method="POST" enctype="multipart/form-data">
-            <label>description</label>
-            <input placeholder="description" type="text" name="description">
-            <br>
-            <label>screenshot</label >
-            <input type="file" name="image">
-            <br>
-            <input type="submit" value="upload">
-        </form>
-    </fieldset>
+			<li class="User" role="presentation" data-choice="choiceThree">
+				<a href="#Player"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;用户<i class="chevron-right glyphicon glyphicon-chevron-right"></i></a>
+				<ul class="choiceUL choice-choiceThree">
+					<li class="User_all"><a href="#Player_allPlayer" aria-controls="outbox" role="tab" data-toggle="tab">所有用户</a></li>
+					<li class="User_screenshot"><a href="#User_screenshot" aria-controls="outbox" role="tab" data-toggle="tab">用户截图/审核截图</a></li>
+				</ul>
+			</li>				
 
+			<li class="Server" role="presentation" data-choice="choiceTwo">
+				<a href="#Server"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;服务端<i class="chevron-right glyphicon glyphicon-chevron-right"></i></a>
+				<ul class="choiceUL choice-choiceTwo servers">
+					<li class="Server_allServer"><a href="#Server_allServer" aria-controls="allServer" role="tab" data-toggle="tab">所有服务端</a></li>
+					<li class="Server_addServer"><a href="#Server_addServer" aria-controls="allServer" role="tab" data-toggle="tab">添加服务端</a></li>
+					<li class="Server_editServer"><a href="#Server_editServer" aria-controls="allServer" role="tab" data-toggle="tab">编辑服务端</a></li>
+				</ul>
+			</li>
+
+			<li class="Group" role="presentation" data-choice="choiceFour">
+				<a href="#Admin"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;权限组<i class="chevron-right glyphicon glyphicon-chevron-right"></i></a>
+				<ul class="choiceUL choice-choiceFour groups">
+					<li class="Admin_addJurisdiction"><a href="#Admin_addJurisdiction" aria-controls="inbox1" role="tab" data-toggle="tab">添加权限组</a></li>
+					<li class="Admin_editJurisdiction"><a href="#Admin_editJurisdiction" aria-controls="inbox1" role="tab" data-toggle="tab">编辑权限组</a></li>
+				</ul>
+			</li>
+
+
+
+			<li class="Bans" role="presentation" data-choice="choiceFive">
+				<a href="#Bans_all" aria-controls="outbox1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;封禁名单</a>
+			</li>
+
+
+			<li class="Community" role="presentation" data-choice="choiceSeven">
+				<a href="#Community" aria-controls="outbox1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;社区</a>
+			</li>
+
+		</ul>
+	</div>
+	<div class="full-content-wrapper">
+		<div class="wrapper-left hidden-xs">
+			<ul class="nav nav-tab vertical-tab" role="tablist" id="vtab">
+				<li role="presentation" data-choice="choiceOne" class="active Dashboard">
+					<a href="#Meter" aria-controls="home" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-scale"></i>&nbsp;&nbsp;仪表盘</a>
+				</li>
+
+				<li class="User" role="presentation" data-choice="choiceThree">
+					<a href="#Player"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;用户<i class="chevron-right glyphicon glyphicon-chevron-right"></i></a>
+					<ul class="choiceUL choice-choiceThree">
+						<li class="User_all"><a href="#Player_allPlayer" aria-controls="outbox" role="tab" data-toggle="tab">所有用户</a></li>
+						<li class="User_screenshot"><a href="#User_screenshot" aria-controls="outbox" role="tab" data-toggle="tab">用户截图/审核截图</a></li>
+					</ul>
+				</li>				
+				
+				<li class="Server" role="presentation" data-choice="choiceTwo">
+					<a href="#Server"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;服务端<i class="chevron-right glyphicon glyphicon-chevron-right"></i></a>
+					<ul class="choiceUL choice-choiceTwo servers">
+						<li class="Server_allServer"><a href="#Server_allServer" aria-controls="allServer" role="tab" data-toggle="tab">所有服务端</a></li>
+						<li class="Server_addServer"><a href="#Server_addServer" aria-controls="allServer" role="tab" data-toggle="tab">添加服务端</a></li>
+						<li class="Server_editServer"><a href="#Server_editServer" aria-controls="allServer" role="tab" data-toggle="tab">编辑服务端</a></li>
+					</ul>
+				</li>
+				
+				<li class="Group" role="presentation" data-choice="choiceFour">
+					<a href="#Admin"><i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;权限组<i class="chevron-right glyphicon glyphicon-chevron-right"></i></a>
+					<ul class="choiceUL choice-choiceFour groups">
+						<li class="Admin_addJurisdiction"><a href="#Admin_addJurisdiction" aria-controls="inbox1" role="tab" data-toggle="tab">添加权限组</a></li>
+						<li class="Admin_editJurisdiction"><a href="#Admin_editJurisdiction" aria-controls="inbox1" role="tab" data-toggle="tab">编辑权限组</a></li>
+					</ul>
+				</li>
+				
+
+				
+				<li class="Bans" role="presentation" data-choice="choiceFive">
+					<a href="#Bans_all" aria-controls="outbox1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;封禁名单</a>
+				</li>
+				
+				<li class="Community" role="presentation" data-choice="choiceSeven">
+					<a href="#Community" aria-controls="outbox1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;社区</a>
+				</li>
+
+			</ul>
+			
+			<div class="version-marker">
+				<p>
+					<a>GmodServerAdmin</a>
+					<i class="glyphicon glyphicon-copyright-mark"></i>
+				</p>
+				<p>
+					<a>汉文</a><b>&</b>
+					<a>远鸿</a><b>&</b>
+					<a>高志</a><b>&</b>
+					<a>嘉健</a>
+				</p>
+				<br>
+				<p>
+					<i></i><b>技术支持 </b><a>Steam</a>
+				</p>
+				<p>
+					版本v1.0.0
+				</p>
+			</div>
+		</div>
+		
+
+		
+		
+		
+		<div class="tab-content vertical-tab-content wrapper-right">
+
+			<div role="tabpanel" class="tab-pane active" id="Meter">
+				<div class="tab-pane-header col-xs-12">
+					<i class="glyphicon glyphicon-scale"></i>&nbsp;&nbsp;
+					仪表盘
+				</div>
+				<div class="tab-pane-body">
+					<h3 class="col-xs-12">所有服务端</h3>
+					<div class="Dashboard_allserver">
+					</div>
+					<div class="creative_graphics">
+					  <div class="cube" tabindex="0">
+						<div class="cube__front"></div>
+						<div class="cube__back"></div>
+						<div class="cube__left"></div>
+						<div class="cube__right"></div>
+						<div class="cube__top"></div>
+						<div class="cube__bottom"></div>
+					  </div>
+					</div>
+					<div class="panel panel-default col-xs-12">
+						<div class="panel-heading">
+							社区每周热门截图
+						</div>
+						<div class="Community_hot_image_show">
+							<div class="panel-body Community_hot_image">
+								<font>暂时没有上热门的截图</font>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+			<div role="tabpanel" class="tab-pane serverinfo_pane" id="Server_info">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;服务端详细信息
+					
+				</div>
+				<div class="tab-pane-body">
+					<table class="body-table-green">
+						<thead>
+							<tr>
+								<th>
+									<span class="server-name"></span>&nbsp;
+									<a href="#Server_info" data-toggle="tab" class="server-refresh" data-id="">
+										<i class="glyphicon glyphicon-refresh"></i>
+									</a>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class="server-controls" style="display: block;">
+										<div class="server-header">
+											<h2>详细信息</h2>
+											密码： <span class="server-password">none</span>
+											<br>
+											地图： <span class="server-map">none</span>
+											<br>
+											游戏模式： <span class="server-gamemode">none</span>
+											<br>
+											人数： <span class="playersOnline">0</span> / <span class="playersMax">0</span>
+											<br>
+											ip： <span class="server-ip"></span>
+											<br>
+											
+											<a href="#" class="btn server-join">加入游戏</a>
+
+											<div class="server-rule col-lg-9 col-sm-7 col-xs-8">
+												<a href="javascript:void(0)" class="btn server-addrule">添加游戏规则</a>
+												<textarea class="server-rule-content" placeholder="没有游戏规则"></textarea>
+												<a href="javascript:void(0)" class="btn server-editrule" style="display: none;">编辑游戏规则</a>
+												<a href="javascript:void(0)" class="btn server-delrule" style="display: none;">删除游戏规则</a>
+											</div>
+											
+										</div>
+										<div class="server-box" style="display: block;">
+											<div class="sid" style="display: none;">2</div>
+											<h2>玩家列表</h2>
+											<table class="table table-striped players-table">
+												<thead>
+													<tr>
+														<th width="30%">玩家名</th>
+														<th width="10%">分数</th>
+														<th width="15%">在线时长</th>
+														<th width="45%">快捷操作</th>
+													</tr>
+												</thead>
+												<tbody class="none">
+													<tr>
+														<td>目前没有在线玩家</td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
+													
+											<div class="server-rcon">
+												<h2>发送命令</h2>
+												<div class="input-group server-rconbody">
+													<input type="text" class="form-control server-cmd" placeholder="控制台命令" name="cmd">
+													<span class="input-group-btn">
+														<button class="btn server-sendcmd" type="submit">发送</button>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			
+
+			<div role="tabpanel" class="tab-pane allServer_pane" id="Server_allServer">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;所有服务端
+					
+				</div>
+				<div class="tab-pane-body">
+					<div class="allServer-onlineServer">
+						<h3>在线服务端</h3>
+						<div>
+							<table class="body-table-green">
+								<thead>
+									<tr>
+										<th>服务端</th>
+										<th>所有人</th>
+										<th>ip</th>
+										<th>端口</th>
+										<th>快捷操作</th>
+									</tr>
+								</thead>
+								<tbody class="none">
+									<tr>
+										<td>目前没有在线服务端</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="allServer-offlineServer">
+						<h3>离线服务端</h3>
+						<div>
+							<table class="body-table-green">
+								<thead>
+									<tr>
+										<th>服务端</th>
+										<th>所有人</th>
+										<th>ip</th>
+										<th>端口</th>
+										<th>快捷操作</th>
+									</tr>
+								</thead>
+								<tbody class="none">
+									<tr>
+										<td>目前没有离线服务端</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		
+		
+			<div role="tabpanel" class="tab-pane" id="Server_addServer">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;添加服务端
+				</div>
+				<div class="tab-pane-body">
+					<table class="body-table-green">
+						<thead>
+							<tr>
+								<th>添加服务端</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<input type="text" class="addServer-name col-xs-12" placeholder="服务端名" autocomplete="off" />
+									<input type="text" class="addServer-address col-xs-12" placeholder="服务端地址" autocomplete="off" />
+									<input type="text" class="addServer-port col-xs-12" placeholder="端口" autocomplete="off" />
+									
+									<input type="text" class="addServer-rconpassword col-xs-12" placeholder="Rcon密码" autocomplete="off" />
+									<input type="submit" class="addServer-submit" value="提交" data-toggle="modal" data-target="#myModal"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		
+		
+		
+			<div role="tabpanel" class="tab-pane" id="Server_editServer">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;
+					编辑服务端
+				</div>
+				<div class="tab-pane-body">
+					<table class="body-table-green col-xs-12">
+						<thead>
+							<tr>
+								<th>编辑服务端</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<select class="Communication-type-select form-control">
+										<option value="0">选择服务端</option>
+									</select>
+									<div class="Server_editvalue" style="display: none;">
+										<font class="col-xs-3 col-sm-2">服务端名</font><input type="text" class="editServer-name col-xs-9 col-sm-10" autocomplete="off" />
+										<font class="col-xs-3 col-sm-2">服务端地址</font><input type="text" class="editServer-address col-xs-9 col-sm-10" autocomplete="off" />
+										<font class="col-xs-3 col-sm-2">端口</font><input type="text" class="editServer-port col-xs-9 col-sm-10" autocomplete="off" />
+										<font class="col-xs-3 col-sm-2">Rcon密码</font><input type="text" class="editServer-rconpassword col-xs-9 col-sm-10" autocomplete="off" />
+										<font class="col-xs-3 col-sm-2"></font><input type="submit" class="editServer-submit" value="提交" data-toggle="modal" data-target="#myModal" />	
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		
+			
+			
+			<div role="tabpanel" class="tab-pane" id="Player_allPlayer">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;所有用户
+				</div>
+				<div class="tab-pane-body col-xs-12">
+						
+					<h2>所有用户</h2>
+					
+					<div class="col-xs-12">
+						<div class="search-div">
+							<input type="text" class="search-input" placeholder="搜索玩家名称或steamid" autocomplete="off" name="search-player" />
+							<button class="btn btn-neutron" type="button" name="search-player_submit">
+								搜索
+							</button>
+						</div>
+						<table class="body-table-green users_tab">
+							<thead>
+								<tr><th>用户名</th><th>权限组</th><th>快速操作</th></tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-xs-12">
+						<nav aria-label="Page navigation">
+							<ul class="pagination">
+							<li>
+								<a href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li class="active"><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li>
+								<a href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+							</ul>
+						</nav>
+					</div>
+					
+				</div>
+			</div>
+			
+			
+			<div role="tabpanel" class="tab-pane" id="User_screenshot">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;用户截图/审核截图
+				</div>
+				<div class="tab-pane-body">
+					<div class="body-table-green col-xs-12">
+						<div class="panel panel-default col-xs-12">
+							<div class="panel-heading">
+								待审核截图
+							</div>
+							<div class="Community_audit_show">
+								<div class="panel-body Community_audit">
+									<font>没有待审核截图</font>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="body-table-green col-xs-12">
+						<div class="panel panel-default col-xs-12">
+							<div class="panel-heading">
+								用户所有截图
+							</div>
+							<div class="Community_images_show">
+								<select class="Communication-type-select form-control">
+									<option value="0">选择用户</option>
+								</select>
+								<div class="panel-body Community_images" style="display: none;">
+									<font>没有待审核截图</font>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
+			<div role="tabpanel" class="tab-pane" id="Admin_addJurisdiction">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-education"></i>&nbsp;&nbsp;权限组
+				</div>
+				<div class="tab-pane-body">
+					<table class="body-table-green">
+						<thead>
+							<tr><th>添加权限组</th></tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class="col-xs-12"><font class="col-xs-2">权限组名称</font><input type="text" class="col-xs-10 group-add-name" autocomplete="off"  placeholder="权限组名称" /></div>
+									<div class="col-xs-12">
+										<font class="col-xs-2">可操作权限</font>
+										<div class="powers-checkboxlist col-xs-10">
+											<span class="col-md-6 col-sm-12 col-xs-12">
+												<i class="glyphicon glyphicon-remove"></i>
+												<input style="display: none;" type="checkbox" name="">
+												<font>没有任何权限，请重新安装</font>
+											</span>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<font class="col-xs-2">&nbsp;</font><div><button class="group-add-submit" type="submit"  data-toggle="modal" data-target="#myModal">提交</button></div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+			
+
+
+			<div role="tabpanel" class="tab-pane" id="Admin_editJurisdiction">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;
+					编辑权限组
+				</div>
+				<div class="tab-pane-body">
+					<table class="body-table-green">
+						<thead>
+							<tr><th>编辑权限组</th></tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<select class="Communication-type-select form-control">
+										<option value="0">选择权限组</option>
+									</select>
+									<div class="Group_editvalue" style="display: none;">
+										<div class="col-xs-12">
+											<font class="col-xs-3 col-md-2">权限组名称</font><input type="text" class="col-xs-9 col-md-10 group-edit-name" autocomplete="off"  placeholder="权限组名称" /></div>
+										<div class="col-xs-12">
+											<font class="col-xs-3 col-md-2">可操作权限</font>
+											<div class="powers-checkboxlist col-xs-9 col-md-10">
+												<span class="col-md-6 col-sm-12 col-xs-12">
+													<i class="glyphicon glyphicon-remove"></i>
+													<input style="display: none;" type="checkbox" name="">
+													<font>没有任何权限，请重新安装</font>
+												</span>
+											</div>
+										</div>
+										<div class="col-xs-12">
+											<font class="col-xs-2">&nbsp;</font><div><button class="group-edit-submit" type="submit" data-toggle="modal" data-target="#myModal">提交编辑</button></div>
+											<font class="col-xs-2">&nbsp;</font><div><button class="group-remove-submit" type="submit" data-toggle="modal" data-target="#myModal">删除此组</button></div>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+			</div>
+
+
+			
+			<div role="tabpanel" class="tab-pane" id="Setting_General">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-cog"></i>&nbsp;&nbsp;通用设置
+				</div>
+				<div class="tab-pane-body">
+					<table class="body-table-green">
+						<thead>
+							<tr><th>通用设置</th></tr>
+						</thead>
+						<tbody>
+							<tr><td>
+								<div class="col-xs-12"><font class="col-xs-2">站点标题</font><input type="text" class="col-xs-10" autocomplete="off"  placeholder="请输入站点标题" value="孙汉文专用服务端" /></div>
+								<div class="col-xs-12"><font class="col-xs-2">站点地址</font><input type="text" class="col-xs-10" autocomplete="off"  placeholder="请输入站点地址" value="http://jdcp3102.com/demo" /></div>
+								<div class="col-xs-12"><font class="col-xs-2">站点IP</font><input type="text" class="col-xs-10" autocomplete="off"  placeholder="请输入站点IP" value="00.00.00.00" /></div>
+								<div class="col-xs-12"><span class="col-xs-12"><i class="glyphicon glyphicon-ok"></i><font>具有所有权限的全局组是否覆盖所有内容？</font></span></div>
+								<div class="col-xs-12"><span class="col-xs-12"><i class="glyphicon glyphicon-ok"></i><font>使用NeutronAdmin.com的电子邮件服务器</font></span></div>
+								<div class="col-xs-12"><span class="col-xs-12"><i class="glyphicon glyphicon-ok"></i><font>向已登录但不是管理员的用户授予权限？</font></span></div>
+								<div class="col-xs-12"><font class="col-xs-2">默认全局</font><div class="col-xs-10">
+									<select class="Communication-type-select form-control">
+										<option value="0">无</option>
+									</select></div></div>
+								<div class="col-xs-12"><font class="col-xs-2">默认服务器</font><span class="col-xs-10"><i class="glyphicon glyphicon-remove"></i><font>孙汉文专用服务器</font></span></div>
+								<div class="col-xs-12"><span class="col-xs-12"><i class="glyphicon glyphicon-remove"></i><font>始终在线显示服务器（没有fsockopen功能的异常修复）？</font></span></div>
+								<div class="col-xs-12"><span class="col-xs-12"><i class="glyphicon glyphicon-remove"></i><font>清除缓存？</font></span></div>
+								<div class="col-xs-12"><button type="submit">Submit</button></div>
+							</td></tr>
+						</tbody>
+					</table>
+					
+				</div>
+			</div>
+
+
+
+			<div role="tabpanel" class="tab-pane" id="Bans_all">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;所有封禁名单
+				</div>
+				<div class="tab-pane-body col-xs-12">
+						
+					<h2>所有封禁名单</h2>
+					
+					<div class="col-xs-12">
+						<div class="search-div">
+							<input type="text" class="search-input" placeholder="搜索玩家名称或steamid" autocomplete="off" name="search-player" />
+							<button class="btn btn-neutron" type="button" name="search-player_submit">
+								搜索
+							</button>
+						</div>
+						<table class="body-table-green bans_tab">
+							<thead>
+								<tr><th>用户名/用户ID</th><th>操作人</th><th>服务端</th><th>解封时间</th><th>封禁时间</th><th>原因</th><th>快速操作</th></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>没有封禁记录</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-xs-12">
+						<nav aria-label="Page navigation">
+							<ul class="pagination">
+							<li>
+								<a href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li class="active"><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li>
+								<a href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+							</ul>
+						</nav>
+					</div>
+					
+				</div>
+			</div>
+			
+
+			
+			<div role="tabpanel" class="tab-pane" id="Community">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;社区
+				</div>
+				<div class="tab-pane-body Community_body">
+					
+					<div class="Community-Navigation col-xs-12">
+						<div class="Navigation col-xs-12">秀逗广场</div>
+					</div>
+					<div class="Community-Show col-xs-12">
+						<font>广场还没有照片呢 ~</font>
+						<div id="warp"></div>
+					</div>
+					<div class="Community-upload col-xs-12">
+						<textarea placeholder="不说点儿什么？" type="text" name="description"></textarea>
+						<div id="images">
+							<ul id="list"></ul>
+							<label for="files" id="label-files">
+								<img src="images/图片上传.png" alt="" id="img_1"/>共<span id="ni">0</span>张，还能上传<span id="fi">10</span>张(测试版本，现只能上传一张截图，且为您选择的最后那张)
+							</label>
+							<input id="files" type="file" name="image" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
+						</div>
+						<!-- Button trigger modal -->
+						<input id="upload_submit" type="submit" value="提交" data-toggle="modal" data-target="#myModal">
+						
+						
+					</div>
+					
+				</div>
+			</div>
+
+
+
+			<div role="tabpanel" class="tab-pane" id="Community_image_info">
+				<div class="tab-pane-header">
+					<i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;游戏截图
+				</div>
+				<div class="tab-pane-body">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							截图详情
+						</div>
+						<div class="panel-body">
+							<div class="Community_image_box">
+								<div class="Community_image_box_imgDiv">
+									<img id="label-files" class="community-image" />
+								</div>		
+								<span class="community-uploader"></span>
+								<textarea class="community-desc" placeholder="什么都没说。"></textarea><br>
+								<input class="community-editsubmit" type="button" value="提交编辑" onclick="$('#myModal .modal-body').text('编辑成功！');"  data-toggle="modal" data-target="#myModal" />
+							</div>
+						</div>
+					</div>
+					<div class="panel-information">
+						<div class="information-head-background"></div>
+						<div class="information-head">
+							<img class="information-head-img" />
+						</div>
+						<span class="information-head-name"></span>
+						<div class="information-body">
+							<div class="information-body-read">
+								<i class="glyphicon glyphicon-eye-open">&nbsp;</i><span></span>
+							</div>
+						</div>
+						<div class="information-footer">
+							<div class="information-footer-facebook">
+								<div class="information-footer-facebook-img"></div>
+							</div>
+							<div class="information-footer-google">
+								<div class="information-footer-google-img"></div>
+							</div>
+							<div class="information-footer-linkedin">
+								<div class="information-footer-linkedin-img"></div>
+							</div>
+							<div class="information-footer-twitter">
+								<div class="information-footer-twitter-img"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
 </body>
 </html>
+<script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="./bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="./js/index.js"></script>
+<script type="text/javascript" src="./js/require.js"></script>
+<script type="text/javascript" src="./js/groups.js"></script>
+<script type="text/javascript" src="./js/users.js"></script>
+<script type="text/javascript" src="./js/steamin.js"></script>
+<script type="text/javascript" src="./js/servers.js"></script>
+<script type="text/javascript" src="./js/dashboard.js"></script>
+<script type="text/javascript" src="./js/bans.js"></script>
+<script type="text/javascript" src="./js/screenshot.js"></script>

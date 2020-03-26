@@ -19,6 +19,7 @@ router.post('/banplayer', check({Login:true, Power:Power.PLAYER_BAN}), (req, res
     const operid = req.session.user.id;
 
     const banjson = {
+        playername : req.body.playername,
         userid : req.body.userid,
         operid : operid,
         serverid : req.body.serverid,
