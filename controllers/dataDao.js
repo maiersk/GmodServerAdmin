@@ -1,3 +1,4 @@
+const conf = require("../config/defeult").mysql;
 const logger = new (require('../lib/Logger'))('[MySQL Dao]', false, 'dataDao.js');
 
 class dataDao {
@@ -21,7 +22,7 @@ class dataDao {
             }
 
             // logger.debug(this.table, keys.join(', '), values.join(', '));
-            const sql = 'INSERT INTO ' + this.table +
+            const sql = 'INSERT INTO ' + conf.database + "." + this.table +
                         ' ( ' + keys + ' ) VALUES' +
                         ' ( ' + values + ' );'
 
@@ -59,7 +60,7 @@ class dataDao {
             }
 
             // logger.debug(sets.join(', '));
-            const sql = 'UPDATE ' + this.table +
+            const sql = 'UPDATE ' + conf.database + "." + this.table +
                         ' SET ' + sets.join(', ') +
                         ' WHERE ' + idk + ' = \'' + idv + '\';'
 
@@ -91,7 +92,7 @@ class dataDao {
 
             logger.debug('objkey', idk, idv);
 
-            const sql = 'DELETE FROM ' + this.table +
+            const sql = 'DELETE FROM ' + conf.database + "." + this.table +
                         ' WHERE ' + idk + ' = \'' + idv + '\';'
 
             logger.debug('SQL command :', sql);
@@ -110,7 +111,7 @@ class dataDao {
     // 注意对象'name'需与表'name'一样！
     findBy(key, value) {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM ' + this.table + 
+            const sql = 'SELECT * FROM ' + conf.database + "." + this.table + 
                         ' WHERE ' + key + ' = \'' + value + '\';'
 
             logger.debug('SQL command :', sql);
@@ -129,7 +130,7 @@ class dataDao {
     findAll() {
         return new Promise((resolve, resject) => {
             this.conn.query(
-                'SELECT * FROM ' + this.table + ';',
+                'SELECT * FROM ' + conf.database + "." + this.table + ';',
                 (err, results) => {
                     // console.log(results); 
                     resolve(results);

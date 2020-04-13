@@ -83,7 +83,7 @@ $(() => {
                         // console.log(div);
                         div.children('.server_moreinfo').html(serverinfo.name);
                         div.children('p').children('font').html('在线');
-	        div.children('p').children('font').css("color","#708DFB");
+                        div.children('p').children('font').css("color","#708DFB");
                         //document.getElementById('fontid').style.color='#0e13b9';
                     } else {
                         console.log(res.massage);    
