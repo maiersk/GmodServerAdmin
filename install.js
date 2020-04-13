@@ -74,6 +74,9 @@ const main = async (args) => {
                     
                     process.exit(0);
                 }
+
+                console.log(err);
+                process.exit(0);
             }
 
             try {
