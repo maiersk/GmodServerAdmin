@@ -11,7 +11,7 @@
     "test": "test"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.0",
     "long": "^4.0.0",
